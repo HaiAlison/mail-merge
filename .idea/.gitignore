@@ -1,0 +1,11 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+.idea
+/git_toolbox_blame.xml
+/mail-merge.iml
+/modules.xml
+/inspectionProfiles/Project_Default.xml
+/vcs.xml
