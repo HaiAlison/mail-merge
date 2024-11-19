@@ -7,6 +7,7 @@ import {
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { useLocation, useNavigate } from "react-router-dom";
+import Logout from "./Logout";
 
 const {Header, Content, Footer, Sider} = Layout;
 
@@ -27,7 +28,7 @@ const items = [
 ];
 const Home = ({children}) => {
   const navigate = useNavigate();
-const location = useLocation();
+  const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: {colorBgContainer, borderRadiusLG},
@@ -55,8 +56,9 @@ const location = useLocation();
           style={{
             padding: 0,
             background: colorBgContainer,
-          }}
-        />
+          }}>
+          <Logout/>
+        </Header>
         <Content
           style={{
             margin: '0 16px',
