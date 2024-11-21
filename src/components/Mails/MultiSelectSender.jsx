@@ -1,23 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Button, Divider, Input, Select, Space } from "antd";
+import React, { useState, useEffect, forwardRef, useCallback } from "react";
+import { Divider, notification, Select } from "antd";
 import { getSenders } from "../../api/mailApi";
-import { PlusOutlined } from "@ant-design/icons";
+import CreateSenderButton from "../Senders/CreateSenderButton";
 
-const MultiSelectSender = () => {
+const MultiSelectSender = forwardRef((props) => {
   const [selected, setSelected] = useState([]);
   const [options, setOptions] = useState([]);
-  const [name, setName] = useState('');
-  const inputRef = useRef(null);
-
-  const addItem = () => {
-
-  }
-  const onNameChange = (event) => {
-    setName(event.target.value);
-  };
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     // Fetch options
-    getSenders(10, 1).then((data) => {
+    getSenders(100, 1).then((data) => {
       setOptions(
         data.results.map((sender) => ({
             value: sender.email,
@@ -25,11 +16,20 @@ const MultiSelectSender = () => {
           })
         )
       );
-    });
+    }).catch(e => {
+      notification.error({
+        message: 'Lỗi',
+        description: 'Có lỗi xảy ra khi lấy danh sách người gửi.'
+      })
+    })
   }, []);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleSelect = (selected) => {
     setSelected(selected);
+    props.onChange(selected);
   };
 
   return (
@@ -40,25 +40,26 @@ const MultiSelectSender = () => {
       mode="tags"
       style={{width: "50%"}}
       placeholder="Chọn người gửi"
+      listHeight={400}
       dropdownRender={(menu) => (
         <>
           {menu}
           <Divider style={{margin: '8px 0'}} />
-          <Space style={{padding: '0 8px 4px'}}>
-            <Input
-              placeholder="Please enter item"
-              ref={inputRef}
-              value={name}
-              onChange={onNameChange}
-              onKeyDown={(e) => e.stopPropagation()}
-            />
-            <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
-              Add item
-            </Button>
-          </Space>
+          <CreateSenderButton fetchData={() => {
+            fetchData();
+          }} />
         </>
-      )}
+      )
+      }
+      dropdownStyle={
+        {
+          maxHeight: 400,
+          overflow: 'auto',
+          zIndex: 1000
+        }
+      }
     />
-  );
-};
+  )
+    ;
+});
 export default MultiSelectSender;

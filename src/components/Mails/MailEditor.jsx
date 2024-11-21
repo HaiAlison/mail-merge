@@ -32,9 +32,9 @@ const MailEditor = forwardRef((props, ref) => {
         });
       },
       width: '100%',
-      height: '200px',
+      height: '150px',
       stickyToolbar: '0',
-      maxHeight: '250px',
+      maxHeight: '200px',
     }
     return (
       <div>

@@ -1,19 +1,19 @@
 import React, { useRef, useState } from 'react';
-import { Form, Input, notification, FloatButton } from 'antd';
+import { Form, Input, notification, Button } from 'antd';
 import Home from "./Home";
-import MailEditor from "./MailEditor";
+import MailEditor from "../components/Mails/MailEditor";
 import { sendMail } from "../api/mailApi";
 import MultiSelectSender from "../components/Mails/MultiSelectSender";
-import { MailFilled } from '@ant-design/icons';
+import { useToken } from "../hooks/useToken";
 
 const MailForm = () => {
   const [form] = Form.useForm();
   const editorRef = useRef(null);
-
+  const tokenData = useToken();
   const onFinish = (values) => {
     try {
       const payload = {
-        user_id: '7c29d409-c134-44fb-b171-4d942006979a',
+        user_id: tokenData.id,
         to: values.to,
         subject: values.subject,
         text: values.body,
@@ -25,31 +25,25 @@ const MailForm = () => {
         });
         form.resetFields();
         editorRef?.current?.editor?.setContents('');
+        setLoading(false);
+      }).catch((e) => {
+        console.error(e);
+        setLoading(false);
+        notification.error({
+          message: 'Lỗi',
+          description: 'Có lỗi xảy ra khi gửi email.',
+        });
       });
     } catch (e) {
       console.error(e);
+      setLoading(false);
       notification.error({
         message: 'Lỗi',
         description: 'Có lỗi xảy ra khi gửi email.',
       })
     }
   };
-  const [loadings, setLoadings] = useState([]);
-  const enterLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
-
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }, 1000);
-  };
+  const [loading, setLoading] = useState(false);
 
 
   return (
@@ -64,7 +58,7 @@ const MailForm = () => {
           label="Đến"
           rules={[{required: true, message: 'Vui lòng nhập email người nhận!'}]}
         >
-          <MultiSelectSender />
+          <MultiSelectSender ref={editorRef} />
         </Form.Item>
 
         <Form.Item
@@ -83,11 +77,9 @@ const MailForm = () => {
           <MailEditor ref={editorRef} />
         </Form.Item>
         <Form.Item>
-          <FloatButton type="primary" loading={loadings[1]} onClick={() => enterLoading(1)}
-                       icon={<MailFilled />}
-                       style={{insetInlineEnd: 24, width: "80px", bottom: "147px", height: "80px", right: "16px"}}
-                       htmlType="submit">
-          </FloatButton>
+          <Button type="primary" loading={loading} onClick={() => setLoading(true)}
+                  htmlType="submit">Gửi
+          </Button>
         </Form.Item>
       </Form>
     </Home>

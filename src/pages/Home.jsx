@@ -8,8 +8,8 @@ import {
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { useLocation, useNavigate } from "react-router-dom";
-import Logout from "../components/Auth/Logout";
 import { capitalizeFirstLetter } from "../utils/common";
+import User from "../components/Auth/User";
 
 const {Header, Content, Footer, Sider} = Layout;
 
@@ -61,7 +61,7 @@ const Home = ({children}) => {
             padding: 0,
             background: colorBgContainer,
           }}>
-          <Logout/>
+          <User/>
         </Header>
         <Content
           style={{
@@ -82,7 +82,7 @@ const Home = ({children}) => {
           <div
             style={{
               padding: 24,
-              minHeight: 360,
+              minHeight: 500,
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}
