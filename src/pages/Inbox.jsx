@@ -1,11 +1,11 @@
 import React from 'react';
 import Home from "./Home";
 
-const Team = () => {
+const Inbox = () => {
 
   return (
    <Home/>
   );
 };
 
-export default Team;
+export default Inbox;

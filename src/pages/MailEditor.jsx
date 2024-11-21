@@ -38,7 +38,7 @@ const MailEditor = forwardRef((props, ref) => {
     }
     return (
       <div>
-        <SunEditor ref={editorRef} onChange={props.onChange} setOptions={options}/>
+        <SunEditor ref={editorRef} onChange={props.onChange} setOptions={options} />
       </div>
     );
   })

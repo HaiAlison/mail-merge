@@ -13,13 +13,18 @@
     "antd": "^5.22.1",
     "axios": "^1.7.7",
     "ckeditor5": "^43.3.1",
+    "echarts-for-react": "^3.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-router-dom": "^6.28.0",
     "react-scripts": "5.0.1",
     "suneditor": "^2.47.0",
     "suneditor-react": "^3.6.1",
     "web-vitals": "^2.1.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.0-placeholder-for-preset-env.2"
   },
   "scripts": {
     "start": "react-scripts start",

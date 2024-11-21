@@ -1,8 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { Form, Input, Button, notification } from 'antd';
+import { Form, Input, notification, FloatButton } from 'antd';
 import Home from "./Home";
 import MailEditor from "./MailEditor";
 import { sendMail } from "../api/mailApi";
+import MultiSelectSender from "../components/Mails/MultiSelectSender";
+import { MailFilled } from '@ant-design/icons';
 
 const MailForm = () => {
   const [form] = Form.useForm();
@@ -16,7 +18,6 @@ const MailForm = () => {
         subject: values.subject,
         text: values.body,
       };
-      console.log(payload)
       sendMail(payload).then(() => {
         notification.success({
           message: 'Thành công',
@@ -63,7 +64,7 @@ const MailForm = () => {
           label="Đến"
           rules={[{required: true, message: 'Vui lòng nhập email người nhận!'}]}
         >
-          <Input placeholder="Email người nhận"/>
+          <MultiSelectSender />
         </Form.Item>
 
         <Form.Item
@@ -71,7 +72,7 @@ const MailForm = () => {
           label="Chủ đề"
           rules={[{required: true, message: 'Vui lòng nhập chủ đề!'}]}
         >
-          <Input placeholder="Chủ đề email"/>
+          <Input style={{width: "50%"}} placeholder="Chủ đề email" />
         </Form.Item>
 
         <Form.Item
@@ -79,12 +80,14 @@ const MailForm = () => {
           label="Nội dung"
           rules={[{required: true, message: 'Vui lòng nhập nội dung!'}]}
         >
-          <MailEditor ref={editorRef}/>
+          <MailEditor ref={editorRef} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" loading={loadings[1]} onClick={() => enterLoading(1)} htmlType="submit">
-            Gửi
-          </Button>
+          <FloatButton type="primary" loading={loadings[1]} onClick={() => enterLoading(1)}
+                       icon={<MailFilled />}
+                       style={{insetInlineEnd: 24, width: "80px", bottom: "147px", height: "80px", right: "16px"}}
+                       htmlType="submit">
+          </FloatButton>
         </Form.Item>
       </Form>
     </Home>
