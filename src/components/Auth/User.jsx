@@ -1,6 +1,7 @@
-import { Dropdown, FloatButton, Space } from "antd";
+import { Avatar, Dropdown, Image, Space } from "antd";
 import Logout from "./Logout";
-import { UserOutlined } from "@ant-design/icons";
+import { useToken } from "../../hooks/useToken";
+import isha from "../../utils/images/isha.jpg";
 
 const User = () => {
   const items = [
@@ -10,11 +11,15 @@ const User = () => {
     },
     {key: 'logout', label: (<Logout />)},
   ]
+  const tokenData = useToken();
   return (
     <Space direction="vertical">
       <Space wrap>
         <Dropdown menu={{items}} placement="bottom" trigger={['click']}>
-          <FloatButton type={"primary"} style={{top: "10px", marginRight: "20px"}} icon={<UserOutlined />} />
+          <Avatar type={"primary"}
+                  style={{position: "absolute", right: "10px", top: "5px", marginRight: "20px", cursor: "pointer"}}
+                  size={48}
+                  icon={<Image preview={false} src={tokenData?.avatar || isha} alt={"avatar"} />} />
         </Dropdown>
       </Space>
     </Space>

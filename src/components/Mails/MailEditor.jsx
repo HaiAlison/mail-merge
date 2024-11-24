@@ -20,7 +20,7 @@ const MailEditor = forwardRef((props, ref) => {
         ['outdent', 'indent'],
         ['align', 'list', 'lineHeight'],
         ['link', 'image'],
-        ['fullScreen', 'codeView'],
+        ['fullScreen', 'showBlocks', 'codeView', 'preview'],
         ['preview', 'print'],
         ['save']
       ],

@@ -33,7 +33,7 @@ function CreateSenderButton({fetchData}) {
   }
 
   return (
-    <div style={{position: "absolute", right: '30px', paddingTop: "10px", paddingBottom: "20px", zIndex: 1050}}>
+    <div>
       <Modal
         title="Tạo người gửi"
         placement="right"

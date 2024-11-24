@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { Form, Input, notification, Button } from 'antd';
+import { Form, Input, notification, Button, Space } from 'antd';
 import Home from "./Home";
 import MailEditor from "../components/Mails/MailEditor";
 import { sendMail } from "../api/mailApi";
 import MultiSelectSender from "../components/Mails/MultiSelectSender";
 import { useToken } from "../hooks/useToken";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 const MailForm = () => {
   const [form] = Form.useForm();
@@ -45,7 +46,6 @@ const MailForm = () => {
   };
   const [loading, setLoading] = useState(false);
 
-
   return (
     <Home>
       <Form
@@ -76,6 +76,36 @@ const MailForm = () => {
         >
           <MailEditor ref={editorRef} />
         </Form.Item>
+        <Form.List name="key_val" label="Dữ liệu động">
+          {(fields, {add, remove}) => (
+            <>
+              {fields.map(({key, name, ...restField}) => (
+                <Space key={key} style={{display: 'flex', marginBottom: 8}} align="baseline">
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'key']}
+                    rules={[{required: true, message: 'Missing key'}]}
+                  >
+                    <Input placeholder="Key" />
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'value']}
+                    // rules={[{required: true, message: 'Missing last name'}]}
+                  >
+                    <Input placeholder="Value" />
+                  </Form.Item>
+                  <MinusCircleOutlined onClick={() => remove(name)} />
+                </Space>
+              ))}
+              <Form.Item>
+                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                  Add field
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
         <Form.Item>
           <Button type="primary" loading={loading} onClick={() => setLoading(true)}
                   htmlType="submit">Gửi
