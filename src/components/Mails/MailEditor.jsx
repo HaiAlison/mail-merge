@@ -20,7 +20,7 @@ const MailEditor = forwardRef((props, ref) => {
         ['outdent', 'indent'],
         ['align', 'list', 'lineHeight'],
         ['link', 'image'],
-        ['fullScreen', 'codeView'],
+        ['fullScreen', 'showBlocks', 'codeView', 'preview'],
         ['preview', 'print'],
         ['save']
       ],
@@ -32,13 +32,13 @@ const MailEditor = forwardRef((props, ref) => {
         });
       },
       width: '100%',
-      height: '200px',
+      height: '150px',
       stickyToolbar: '0',
-      maxHeight: '250px',
+      maxHeight: '200px',
     }
     return (
       <div>
-        <SunEditor ref={editorRef} onChange={props.onChange} setOptions={options}/>
+        <SunEditor ref={editorRef} onChange={props.onChange} setOptions={options} />
       </div>
     );
   })

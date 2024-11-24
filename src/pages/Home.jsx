@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  SendOutlined, InboxOutlined,
   MailOutlined,
   FileOutlined,
   PieChartOutlined,
@@ -7,7 +8,8 @@ import {
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { useLocation, useNavigate } from "react-router-dom";
-import Logout from "./Logout";
+import { capitalizeFirstLetter } from "../utils/common";
+import User from "../components/Auth/User";
 
 const {Header, Content, Footer, Sider} = Layout;
 
@@ -21,10 +23,11 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem('Dashboard', '1', <PieChartOutlined/>),
-  getItem('Mails', '2', <MailOutlined/>),
-  getItem('Team', 'sub2', <TeamOutlined/>, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined/>),
+  getItem('Trang chủ', 'dashboard', <PieChartOutlined/>),
+  getItem('Mails', 'mails', <MailOutlined/>, [getItem('Hòm thư', 'inbox', <InboxOutlined/>), getItem('Soạn thư', 'send',
+    <SendOutlined/>)]),
+  getItem('Người gửi', 'sender', <TeamOutlined/>),
+  getItem('Files', 'files', <FileOutlined/>),
 ];
 const Home = ({children}) => {
   const navigate = useNavigate();
@@ -46,8 +49,9 @@ const Home = ({children}) => {
         <Menu theme="dark" defaultSelectedKeys={[selectedKey]}
               mode="inline" items={items}
               onClick={(e) => {
-                const path = e.keyPath.reverse().map(key => items.find(item => item.key === key)?.label);
-                navigate(`/${path.join('/')}`);
+                //check if the item has children then navigate to match key
+                const item = e.keyPath.reverse();
+                navigate(`/${item.join('/')}`);
               }}
         />
       </Sider>
@@ -57,7 +61,7 @@ const Home = ({children}) => {
             padding: 0,
             background: colorBgContainer,
           }}>
-          <Logout/>
+          <User/>
         </Header>
         <Content
           style={{
@@ -65,14 +69,20 @@ const Home = ({children}) => {
           }}
         >
           <Breadcrumb style={{margin: '16px 0'}}>
-            {useLocation().pathname.split('/').map((item, index) => (
-              <Breadcrumb key={index}>{item}</Breadcrumb>
-            ))}
+            {useLocation().pathname.split('/').map((item, index) => {
+              if (!item) return null;
+              const capitalizedItem = capitalizeFirstLetter(item);
+              return (
+                <Breadcrumb key={index}>
+                  {index === 1 ? capitalizedItem : ` > ${capitalizedItem}`}
+                </Breadcrumb>
+              );
+            })}
           </Breadcrumb>
           <div
             style={{
               padding: 24,
-              minHeight: 360,
+              minHeight: 500,
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}

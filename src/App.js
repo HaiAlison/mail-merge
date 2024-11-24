@@ -2,43 +2,49 @@ import React from 'react';
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Home from "./pages/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./pages/Login";
+import Login from "./components/Auth/Login";
 import Redirect from "./pages/Redirect";
 import MailForm from "./pages/MailForm";
-import Team from "./pages/Team";
 import Files from "./pages/Files";
+import Inbox from "./pages/Inbox";
+import Sender from "./components/Senders/Sender";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="auth/redirect" element={<Redirect/>}/>
+        <Route path="/login" element={<Login />} />
+        <Route path="auth/redirect" element={<Redirect />} />
         <Route path="/" element={
           <ProtectedRoute>
-            <Home/>
+            <Home />
           </ProtectedRoute>
-        }/>
+        } />
         <Route path="dashboard" element={
           <ProtectedRoute>
-            <Home/>
+            <Home />
           </ProtectedRoute>
-        }/>
-        <Route path="/mails" element={
+        } />
+        <Route path="/mails/send" element={
           <ProtectedRoute>
-            <MailForm/>
+            <MailForm />
           </ProtectedRoute>
-        }/>
-        <Route path="/team" element={
+        } />
+        <Route path="/mails/inbox" element={
           <ProtectedRoute>
-            <Team/>
+            <Inbox />
           </ProtectedRoute>
-        }/>
+        } />
+        <Route path="/sender" element={
+          <ProtectedRoute>
+            <Sender />
+          </ProtectedRoute>
+        } />
         <Route path="/files" element={
           <ProtectedRoute>
-            <Files/>
+            <Files />
           </ProtectedRoute>
-        }/>
+        } />
       </Routes>
     </BrowserRouter>
   );
