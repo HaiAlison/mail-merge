@@ -12,7 +12,8 @@ const MultiSelectSender = forwardRef((props) => {
       setOptions(
         data.results.map((sender) => ({
             value: sender.email,
-            label: sender.email
+            label: sender.email,
+            sender: sender
           })
         )
       );
@@ -26,10 +27,9 @@ const MultiSelectSender = forwardRef((props) => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
   const handleSelect = (selected) => {
     setSelected(selected);
-    props.onChange(selected);
+    props.onChange(selected, options);
   };
 
   return (
@@ -42,9 +42,9 @@ const MultiSelectSender = forwardRef((props) => {
       placeholder="Chọn người gửi"
       listHeight={400}
       dropdownRender={(menu) => (
-        <div >
+        <div>
           <div style={{height: "200px", overflowY: "scroll", transition: "all 0.5s linear"}}>{menu}</div>
-          <div style={{width:'100%'}}>
+          <div style={{width: '100%'}}>
             <Divider style={{margin: '8px 0'}} />
             <CreateSenderButton fetchData={() => {
               fetchData();
