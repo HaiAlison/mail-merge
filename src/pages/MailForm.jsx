@@ -6,19 +6,53 @@ import { sendMail } from "../api/mailApi";
 import MultiSelectSender from "../components/Mails/MultiSelectSender";
 import { useToken } from "../hooks/useToken";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import * as ejs from 'ejs-browser';
+import '../styles/Common.css'
 
 const MailForm = () => {
   const [form] = Form.useForm();
   const editorRef = useRef(null);
   const tokenData = useToken();
-  const onFinish = (values) => {
-    try {
+  const decodeHTML = (html) => {
+    return html
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&');
+  };
+  const [loading, setLoading] = useState(false);
+  const [text, setText] = useState('');
+  const [senders, setSenders] = useState([]);
+  const handleSenders = (selected, options) => {
+    setSenders(options);
+  }
+  const handleEJS = (values) => {
+    const responses = senders.filter((t) => values.to.includes(t.value));
+    return responses.map(({sender}) => {
       const payload = {
         user_id: tokenData.id,
-        to: values.to,
+        to: [sender.email],
         subject: values.subject,
         text: values.body,
       };
+      const params = {
+        first_name: sender.first_name,
+        last_name: sender.last_name,
+        email: sender.email,
+      }
+      values['key_val']?.length && values['key_val'].forEach((item) => {
+          Object.assign(params, {[item.key]: item.value})
+        }
+      );
+      payload.text = ejs.render(decodeHTML(payload.text), params);
+      return payload;
+    });
+  }
+  const onFinish = (values) => {
+    const payloads = handleEJS(values);
+    payloads.forEach(t => send(t));
+  };
+  const send = (payload) => {
+    try {
       sendMail(payload).then(() => {
         notification.success({
           message: 'Thành công',
@@ -44,8 +78,14 @@ const MailForm = () => {
       })
     }
   };
-  const [loading, setLoading] = useState(false);
-
+  const handlePreview = () => {
+    form.validateFields().then(values => {
+      const payloads = handleEJS(values);
+      setText(payloads[0].text);
+    }).catch(e => {
+      console.error(e);
+    })
+  }
   return (
     <Home>
       <Form
@@ -58,7 +98,7 @@ const MailForm = () => {
           label="Đến"
           rules={[{required: true, message: 'Vui lòng nhập email người nhận!'}]}
         >
-          <MultiSelectSender ref={editorRef} />
+          <MultiSelectSender ref={editorRef} onChange={handleSenders} />
         </Form.Item>
 
         <Form.Item
@@ -76,6 +116,19 @@ const MailForm = () => {
         >
           <MailEditor ref={editorRef} />
         </Form.Item>
+        <div>
+          <Button style={{marginRight: "10px"}} onClick={handlePreview} level={5}>Xem trước</Button>
+          <Button onClick={() => setText('')} level={5}>Xóa nội dung</Button>
+          <div dangerouslySetInnerHTML={{__html: text}} />
+        </div>
+        <div>
+          <p className={'note'}>Để sử dụng dữ liệu động, hãy sử dụng cú
+            pháp <code>{`
+          <%= key %>
+          `}</code> trong nội dung email.</p>
+          <p className={'note'}>Mặc định sẽ có 2 key là <code>{`email`}</code>, <code>{`first_name`}</code>
+            và <code>{`last_name`}</code> nếu bạn không thêm dữ liệu động.</p>
+        </div>
         <Form.List name="key_val" label="Dữ liệu động">
           {(fields, {add, remove}) => (
             <>
@@ -100,7 +153,7 @@ const MailForm = () => {
               ))}
               <Form.Item>
                 <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                  Add field
+                  Thêm dữ liệu động
                 </Button>
               </Form.Item>
             </>
