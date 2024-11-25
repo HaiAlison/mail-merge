@@ -4965,7 +4965,14 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
-ejs@^3.1.6:
+ejs-browser@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/ejs-browser/-/ejs-browser-3.2.2.tgz#33e044be0696a823aedf8bc46964ab33a9b57c9a"
+  integrity sha512-O0HMr2ye5NFW2N0wybGcTECLRD5P0GRD/0EWQAbPpuAdfQ+DXJXFBFfBKqfqxE8jUIlix4gXDwaJzilTjl0QZA==
+  dependencies:
+    jake "^10.8.5"
+
+ejs@^3.1.10, ejs@^3.1.6:
   version "3.1.10"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.10.tgz#69ab8358b14e896f80cc39e62087b88500c3ac3b"
   integrity sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==
