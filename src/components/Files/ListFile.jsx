@@ -7,6 +7,7 @@ import File from "./NewFile";
 import { DEFAULT_LIMIT } from "../../utils/constant";
 import InfiniteScroll from "react-infinite-scroll-component";
 
+const {Meta} = Card;
 const ListFile = () => {
   const [items, setItems] = useState([]);
   const [offset, setOffset] = useState(1);
@@ -53,7 +54,12 @@ const ListFile = () => {
               dataSource={[...new Set(items)]}
               renderItem={(item) => (
                 <List.Item>
-                  <Card title={item.name}><Image width={100} height={100} src={`${process.env.REACT_APP_API_URL}/${item.full_url}`} /></Card>
+                  <Card hoverable
+                        cover={<Image style={{border: '1px solid #f0f0f0', borderRadius: '15px'}}
+                                      alt={item.key} src={`${process.env.REACT_APP_API_URL}/${item.full_url}`} />}
+                  >
+                    <Meta description={item.key} />
+                  </Card>
                 </List.Item>
               )}
             />
