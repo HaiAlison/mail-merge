@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/Auth/Login";
 import Redirect from "./pages/Redirect";
 import MailForm from "./pages/MailForm";
-import Files from "./pages/Files";
+import ListFile from "./components/Files/ListFile";
 import Inbox from "./pages/Inbox";
 import Sender from "./components/Senders/Sender";
 
@@ -42,7 +42,7 @@ function App() {
         } />
         <Route path="/files" element={
           <ProtectedRoute>
-            <Files />
+            <ListFile />
           </ProtectedRoute>
         } />
       </Routes>

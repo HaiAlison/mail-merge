@@ -23,11 +23,12 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem('Trang chủ', 'dashboard', <PieChartOutlined/>),
-  getItem('Mails', 'mails', <MailOutlined/>, [getItem('Hòm thư', 'inbox', <InboxOutlined/>), getItem('Soạn thư', 'send',
-    <SendOutlined/>)]),
-  getItem('Người gửi', 'sender', <TeamOutlined/>),
-  getItem('Files', 'files', <FileOutlined/>),
+  getItem('Trang chủ', 'dashboard', <PieChartOutlined />),
+  getItem('Mails', 'mails', <MailOutlined />, [getItem('Hòm thư', 'inbox',
+    <InboxOutlined />), getItem('Soạn thư', 'send',
+    <SendOutlined />)]),
+  getItem('Người gửi', 'sender', <TeamOutlined />),
+  getItem('Files', 'files', <FileOutlined />),
 ];
 const Home = ({children}) => {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const Home = ({children}) => {
       }}
     >
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className="demo-logo-vertical"/>
+        <div className="demo-logo-vertical" />
         <Menu theme="dark" defaultSelectedKeys={[selectedKey]}
               mode="inline" items={items}
               onClick={(e) => {
@@ -61,7 +62,7 @@ const Home = ({children}) => {
             padding: 0,
             background: colorBgContainer,
           }}>
-          <User/>
+          <User />
         </Header>
         <Content
           style={{
@@ -82,7 +83,7 @@ const Home = ({children}) => {
           <div
             style={{
               padding: 24,
-              minHeight: 500,
+              height: '100%',
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}
