@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Flex, Form, Image, Input, Modal, Space, Upload } from "antd";
+import { Button, Flex, Form, Image, Input, Modal, notification, Space, Upload } from "antd";
 import { DeleteOutlined, EditOutlined, InboxOutlined, } from "@ant-design/icons";
 import CustomFloatButton from "../CustomFloatButton";
 import CustomModal from "../CustomModal";
@@ -21,16 +21,17 @@ const UploadFile = () => {
     });
     setUploading(true);
     uploadImages(formData).then((res) => {
-      console.log(res);
+      setOpenModal(false);
+      notification.success({message: 'Thành công', description: 'Tải lên tệp thành công'});
+      setFileList([]);
     }).catch(e => {
       console.error('Error:', e);
       Modal.error({
-        title: 'Error',
-        content: 'There was an error uploading the file.'
+        title: 'Lỗi', content: 'Đã xảy ra lỗi khi tải lên tệp'
       });
     }).finally(() => {
-
       setUploading(false);
+      setValue("");
     });
   }
   const handleRename = (file, newName) => {
@@ -38,8 +39,7 @@ const UploadFile = () => {
     const updatedFileList = fileList.map((item) => {
       if (item.uid === file.uid) {
         const renamedFile = new File([item.originFileObj || item], newName, {
-          type: item.type,
-          lastModified: item.lastModified,
+          type: item.type, lastModified: item.lastModified,
         });
         return {...item, originFileObj: renamedFile, name: newName};
 
@@ -109,9 +109,8 @@ const UploadFile = () => {
                       }}
                     />) : (<div onClick={() => setIsEditing(true)}
                                 style={{display: "flex", alignItems: "center"}}>
-                        {field.name} <EditOutlined style={{marginLeft: 8, cursor: "pointer"}} />
-                      </div>
-                    )}
+                      {field.name} <EditOutlined style={{marginLeft: 8, cursor: "pointer"}} />
+                    </div>)}
                   </div>
                   <Button type="primary" size={"middle"}
                           onClick={() => {
