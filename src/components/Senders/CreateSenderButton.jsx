@@ -1,9 +1,12 @@
-import { Button, Form, Input, Modal, notification } from "antd";
+import { Form, Input, notification } from "antd";
 import '../../styles/Common.css'
 import React, { useRef, useState } from "react";
 import { createSender } from "../../api/mailApi";
+import CustomModal from "../CustomModal";
+import CustomButton from "../CustomButton";
+import CustomFloatButton from "../CustomFloatButton";
 
-function CreateSenderButton({fetchData}) {
+function CreateSenderButton({fetchData, isFloatButton}) {
   const [modalVisible, setModalVisible] = useState(false);
   const editorRef = useRef(null);
   const [form] = Form.useForm();
@@ -31,36 +34,34 @@ function CreateSenderButton({fetchData}) {
       });
     })
   }
-
   return (
     <div>
-      <Modal
+      <CustomModal
         title="Tạo người gửi"
-        placement="right"
         onClose={() => setModalVisible(false)}
-        open={modalVisible}
+        visible={modalVisible}
         onOk={() => handleModalOk()}
         onCancel={() => {
           setModalVisible(false);
           clearForm();
         }}
-      >
-        <Form layout="vertical" form={form} name="createSender">
-          <Form.Item label="Họ" name="last_name">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Tên" name="first_name">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Email" name="email" rules={[{required: true, message: "Vui lòng nhập Email"}]}>
-            <Input />
-          </Form.Item>
-        </Form>
-      </Modal>
-      <Button type="primary" size={"large"}
-              onClick={() => setModalVisible(true)}
-      >Thêm mới</Button>
-    </div>);
+        children={
+          <Form layout="vertical" form={form} name="createSender">
+            <Form.Item label="Họ" name="last_name">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Tên" name="first_name">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Email" name="email" rules={[{required: true, message: "Vui lòng nhập Email"}]}>
+              <Input />
+            </Form.Item>
+          </Form>}
+      />
+      {isFloatButton ? <CustomFloatButton onClick={() => setModalVisible(true)} title={"Tạo người gửi"} /> :
+        <CustomButton onClick={() => setModalVisible(true)} title={"Tạo người gửi"} />}
+    </div>
+  );
 }
 
 export default CreateSenderButton;

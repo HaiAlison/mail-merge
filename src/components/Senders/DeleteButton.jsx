@@ -27,7 +27,7 @@ function DeleteButton({id, fetchData}) {
               onClick={() => {
                 handleDeleteButton(id);
               }}
-              style={{backgroundColor: "#f5222d", borderColor: "#f5222d"}}
+              style={{backgroundColor: "#f5222d", borderColor: "#f5222d", marginRight: "2rem"}}
               icon={<DeleteOutlined />}></Button>
     </>);
 }
