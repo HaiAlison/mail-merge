@@ -8,6 +8,7 @@ import MailForm from "./pages/MailForm";
 import ListFile from "./components/Files/ListFile";
 import Inbox from "./pages/Inbox";
 import Sender from "./components/Senders/Sender";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
         } />
         <Route path="dashboard" element={
           <ProtectedRoute>
-            <Home />
+            <Dashboard />
           </ProtectedRoute>
         } />
         <Route path="/mails/send" element={
