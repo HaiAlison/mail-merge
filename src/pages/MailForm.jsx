@@ -42,7 +42,7 @@ const MailForm = () => {
         const payload = {
           user_id: tokenData.id,
           to: [sender.email],
-          cc: values.cc|| [],
+          cc: values.cc || [],
           subject: values.subject,
           text: values.body,
         };
@@ -119,7 +119,7 @@ const MailForm = () => {
 
       <Form.Item
         name="cc"
-        label="cc"
+        label="Cc"
       >
         <MultiSelectSender ref={editorRef} />
       </Form.Item>
@@ -140,7 +140,7 @@ const MailForm = () => {
       </Form.Item>
       <div>
         <Button style={{marginRight: "10px"}} onClick={handlePreview} level={5}>Xem trước</Button>
-        <Button onClick={() => setText('')} level={5}>Xóa nội dung</Button>
+        <Button onClick={() => setText('')} level={5}>Xóa xem trước</Button>
         <div dangerouslySetInnerHTML={{__html: text}} />
       </div>
       <div>
