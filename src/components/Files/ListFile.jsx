@@ -3,7 +3,7 @@ import { Card, Divider, Image, List, notification, Skeleton } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { getImages } from "../../api/uploadAPI";
 import ScrollableList from "../ScrollableList";
-import File from "./NewFile";
+import UploadFile from "./NewFile";
 import { DEFAULT_LIMIT } from "../../utils/constant";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -64,7 +64,7 @@ const ListFile = () => {
               )}
             />
           </InfiniteScroll>}
-        button={<File />}
+        button={<UploadFile />}
       />
     </Home>
   );

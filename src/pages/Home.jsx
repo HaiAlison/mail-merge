@@ -5,11 +5,13 @@ import {
   FileOutlined,
   PieChartOutlined,
   TeamOutlined,
+
 } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Alert, Breadcrumb, Layout, Menu, theme } from 'antd';
 import { useLocation, useNavigate } from "react-router-dom";
 import { capitalizeFirstLetter } from "../utils/common";
 import User from "../components/Auth/User";
+import useNetworkStatus from "../hooks/useNetworkStatus";
 
 const {Header, Content, Footer, Sider} = Layout;
 
@@ -24,10 +26,16 @@ function getItem(label, key, icon, children) {
 
 const items = [
   getItem('Trang chủ', 'dashboard', <PieChartOutlined />),
-  getItem('Mails', 'mails', <MailOutlined />, [getItem('Hòm thư', 'inbox',
-    <InboxOutlined />), getItem('Soạn thư', 'send',
-    <SendOutlined />)]),
-  getItem('Người gửi', 'sender', <TeamOutlined />),
+  getItem('Mails', 'mails', <MailOutlined />,
+    [
+      getItem('Thư đã gửi', 'sent-list',
+        <InboxOutlined />),
+      getItem('Soạn thư', 'send',
+        <SendOutlined />),
+      getItem('Template', 'template',
+        <InboxOutlined />),
+    ]),
+  getItem('Người nhận', 'recipient', <TeamOutlined />),
   getItem('Files', 'files', <FileOutlined />),
 ];
 const Home = ({children}) => {
@@ -38,7 +46,7 @@ const Home = ({children}) => {
     token: {colorBgContainer, borderRadiusLG},
   } = theme.useToken();
   const selectedKey = items.find(item => `/${item.label}` === location.pathname)?.key || '1';
-
+  const {isOnline, isBackendOnline} = useNetworkStatus(process.env.REACT_APP_API_URL + '/health-check');
   return (
     <Layout
       style={{
@@ -69,6 +77,9 @@ const Home = ({children}) => {
             margin: '0 16px',
           }}
         >
+          {!isOnline && <Alert message="No internet connection" type="error" showIcon />}
+          {!isBackendOnline && <Alert message="Backend service is down" type="error" showIcon />}
+
           <Breadcrumb style={{margin: '16px 0'}}>
             {useLocation().pathname.split('/').map((item, index) => {
               if (!item) return null;

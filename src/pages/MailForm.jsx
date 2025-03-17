@@ -3,7 +3,7 @@ import { Button, Form, Input, notification, Select, Space } from 'antd';
 import Home from "./Home";
 import MailEditor from "../components/Mails/MailEditor";
 import { sendMail } from "../api/mailApi";
-import MultiSelectSender from "../components/Mails/MultiSelectSender";
+import MultiSelectRecipient from "../components/Mails/MultiSelectRecipient";
 import { useToken } from "../hooks/useToken";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import * as ejs from 'ejs-browser';
@@ -24,7 +24,7 @@ const MailForm = () => {
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState('');
   const [senders, setSenders] = useState([]);
-  const handleSenders = (selected, options) => {
+  const handleRecipients = (selected, options) => {
     setSenders(options);
   };
   const fetchFiles = () => {
@@ -114,14 +114,14 @@ const MailForm = () => {
         label="Đến"
         rules={[{required: true, message: 'Vui lòng nhập email người nhận!'}]}
       >
-        <MultiSelectSender ref={editorRef} newSender={true} onChange={handleSenders} />
+        <MultiSelectRecipient ref={editorRef} newSender={true} onChange={handleRecipients} />
       </Form.Item>
 
       <Form.Item
         name="cc"
         label="Cc"
       >
-        <MultiSelectSender ref={editorRef} />
+        <MultiSelectRecipient ref={editorRef} />
       </Form.Item>
       <Form.Item
         name="subject"

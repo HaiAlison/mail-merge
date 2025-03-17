@@ -10,36 +10,36 @@ export const sendMail = async (mailData) => {
   }
 };
 
-export const createSender = async (sender) => {
+export const createRecipient = async (recipient) => {
   try {
-    const {data} = await axios.post(`${process.env.REACT_APP_API_URL}/sender/create-sender`, sender, {
+    const {data} = await axios.post(`${process.env.REACT_APP_API_URL}/recipient/create-recipient`, recipient, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       }
     });
     return data;
   } catch (e) {
-    console.error('Error creating sender:', e);
+    console.error('Error creating recipient:', e);
     throw e;
   }
 }
 
-export const getSenders = async (limit, offset) => {
+export const getRecipients = async (limit, offset) => {
   try {
-    const {data} = await axios.get(`${process.env.REACT_APP_API_URL}/sender?limit=${limit}&offset=${offset}`, {
+    const {data} = await axios.get(`${process.env.REACT_APP_API_URL}/recipient?limit=${limit}&offset=${offset}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     });
     return data;
   } catch (e) {
-    console.error('Error getting senders:', e);
+    console.error('Error getting recipients:', e);
     throw e;
   }
 }
-export const deleteSender = async (id) => {
+export const deleteRecipient = async (id) => {
   try {
-    const {data} = await axios.delete(`${process.env.REACT_APP_API_URL}/sender/${id}`, {
+    const {data} = await axios.delete(`${process.env.REACT_APP_API_URL}/recipient/${id}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -47,7 +47,7 @@ export const deleteSender = async (id) => {
     });
     return data;
   } catch (e) {
-    console.error('Error deleting sender:', e);
+    console.error('Error deleting recipient:', e);
     throw e;
   }
 }

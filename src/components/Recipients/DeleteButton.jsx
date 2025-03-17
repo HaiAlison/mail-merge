@@ -1,12 +1,12 @@
 import { Button, notification } from "antd";
 import '../../styles/Common.css'
 import { DeleteOutlined } from '@ant-design/icons'
-import { deleteSender } from "../../api/mailApi";
+import { deleteRecipient } from "../../api/mailApi";
 import { DEFAULT_ERROR_MESSAGE } from "../../utils/constant";
 
 function DeleteButton({id, fetchData}) {
   const handleDeleteButton = (id) => {
-    deleteSender(id).then((res) => {
+    deleteRecipient(id).then((res) => {
       fetchData();
       notification.success({
         message: "Xoá thành công",

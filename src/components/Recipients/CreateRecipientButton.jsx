@@ -1,12 +1,12 @@
 import { Form, Input, notification } from "antd";
 import '../../styles/Common.css'
 import React, { useRef, useState } from "react";
-import { createSender } from "../../api/mailApi";
+import { createRecipient } from "../../api/mailApi";
 import CustomModal from "../CustomModal";
 import CustomButton from "../CustomButton";
 import CustomFloatButton from "../CustomFloatButton";
 
-function CreateSenderButton({fetchData, isFloatButton}) {
+function CreateRecipientButton({fetchData, isFloatButton}) {
   const [modalVisible, setModalVisible] = useState(false);
   const editorRef = useRef(null);
   const [form] = Form.useForm();
@@ -16,10 +16,10 @@ function CreateSenderButton({fetchData, isFloatButton}) {
   }
   const handleModalOk = () => {
     form.validateFields().then(values => {
-      createSender(values).then(() => {
+      createRecipient(values).then(() => {
         setModalVisible(false);
         notification.success({
-          message: 'Thành công', description: 'Người gửi đã được tạo thành công.',
+          message: 'Thành công', description: 'Người nhận đã được tạo thành công.',
         })
         fetchData();
       }).catch((err) => {
@@ -37,7 +37,7 @@ function CreateSenderButton({fetchData, isFloatButton}) {
   return (
     <div>
       <CustomModal
-        title="Tạo người gửi"
+        title="Tạo người nhận"
         onClose={() => setModalVisible(false)}
         visible={modalVisible}
         onOk={() => handleModalOk()}
@@ -58,10 +58,10 @@ function CreateSenderButton({fetchData, isFloatButton}) {
             </Form.Item>
           </Form>}
       />
-      {isFloatButton ? <CustomFloatButton onClick={() => setModalVisible(true)} title={"Tạo người gửi"} /> :
-        <CustomButton onClick={() => setModalVisible(true)} title={"Tạo người gửi"} />}
+      {isFloatButton ? <CustomFloatButton onClick={() => setModalVisible(true)} title={"Tạo người nhận"} /> :
+        <CustomButton onClick={() => setModalVisible(true)} title={"Tạo người nhận"} />}
     </div>
   );
 }
 
-export default CreateSenderButton;
+export default CreateRecipientButton;

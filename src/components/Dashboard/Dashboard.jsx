@@ -5,7 +5,6 @@ import * as echarts from 'echarts/core';
 
 import React, { useEffect, useState } from 'react';
 import { getSummarySent } from "../../api/dashboard";
-import { Space } from "antd";
 
 const Dashboard = () => {
   const [axisData, setAxisData] = useState({

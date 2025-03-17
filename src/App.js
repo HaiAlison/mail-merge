@@ -7,8 +7,9 @@ import Redirect from "./pages/Redirect";
 import MailForm from "./pages/MailForm";
 import ListFile from "./components/Files/ListFile";
 import Inbox from "./pages/Inbox";
-import Sender from "./components/Senders/Sender";
+import Recipient from "./components/Recipients/Recipient";
 import Dashboard from "./components/Dashboard/Dashboard";
+import Template from "./components/Template/Tempate";
 
 function App() {
   return (
@@ -31,14 +32,19 @@ function App() {
             <MailForm />
           </ProtectedRoute>
         } />
-        <Route path="/mails/inbox" element={
+        <Route path="/mails/sent-list" element={
           <ProtectedRoute>
             <Inbox />
           </ProtectedRoute>
         } />
-        <Route path="/sender" element={
+        <Route path="/mails/template" element={
           <ProtectedRoute>
-            <Sender />
+            <Template />
+          </ProtectedRoute>
+        } />
+        <Route path="/recipient" element={
+          <ProtectedRoute>
+            <Recipient />
           </ProtectedRoute>
         } />
         <Route path="/files" element={
