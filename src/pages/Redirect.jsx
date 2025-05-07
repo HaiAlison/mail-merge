@@ -6,6 +6,13 @@ const Redirect = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get('token')
+  if(!token) {
+    notification.error({
+      message: 'Login Failed',
+      description: 'Access denied. Please try again.',
+    });
+    window.location.href = '/login';
+  }
   useEffect(() => {
     if (token) {
       localStorage.setItem('token', token);
