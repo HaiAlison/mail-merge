@@ -32,7 +32,7 @@ export const getImages = async () => {
 
 export const uploadImportRecipient = async (payload) => {
   try {
-    const response = await axios.post(`${process.env.REACT_APP_API_URL}/upload/import-recipient`, payload, {
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/imports`, payload, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${localStorage.getItem('token')}`

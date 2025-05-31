@@ -1,18 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Form, Input, notification, Select, Space } from 'antd';
+import { Button, Form, Input, notification, Select } from 'antd';
 import Home from "./Home";
 import MailEditor from "../components/Mails/MailEditor";
-import { sendMail } from "../api/mailApi";
+import { getRecipients, sendMail } from "../api/mailApi";
 import MultiSelectRecipient from "../components/Mails/MultiSelectRecipient";
 import { useToken } from "../hooks/useToken";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import * as ejs from 'ejs-browser';
 import '../styles/Common.css'
 import { getImages } from "../api/uploadAPI";
+import DynamicKeyValTable from "./DynamicKeyValTable";
 
-const MailForm = () => {
+const MailFormEJS = () => {
   const [form] = Form.useForm();
   const editorRef = useRef(null);
+  const [recipient, setRecipient] = useState([]);
   const [attachments, setAttachments] = useState([]);
   const tokenData = useToken();
   const decodeHTML = (html) => {
@@ -23,9 +24,16 @@ const MailForm = () => {
   };
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState('');
-  const [senders, setSenders] = useState([]);
-  const handleRecipients = (selected, options) => {
-    setSenders(options);
+  const fetchRecipient = () => {
+    getRecipients(100, 1).then((data) => {
+      setRecipient(data.results.map((sender) => ({
+        value: sender.email, label: `${sender.first_name} ${sender.last_name} (${sender.email})`, sender: sender
+      })));
+    }).catch(e => {
+      notification.error({
+        message: 'Lỗi', description: 'Có lỗi xảy ra khi lấy danh sách người nhận.'
+      })
+    })
   };
   const fetchFiles = () => {
     getImages(1000, 0).then((data) => {
@@ -36,33 +44,39 @@ const MailForm = () => {
   }
   const handleEJS = (values) => {
     try {
-      console.log(values)
-      const responses = senders.filter((t) => values.to.includes(t.value));
-      return responses.map(({sender}) => {
-        const payload = {
-          user_id: tokenData.id,
-          to: [sender.email],
-          cc: values.cc || [],
-          subject: values.subject,
-          text: values.body,
-        };
-        const params = {
-          full_name: sender.first_name + ' ' + sender.last_name, email: sender.email,
-        }
-        values['key_val']?.length && values['key_val'].forEach((item) => {
-          Object.assign(params, {[item.key]: item.value})
-        });
-        values['attachments']?.length && values['attachments'].forEach((item) => {
-          Object.assign(params, {[item.replace(/uploads\/|\.\w+$/g, "")]: process.env.REACT_APP_API_URL + '/' + item})
+      if (values['key_val']?.length) {
+        const recipients = values['key_val'].map((item) => {
+          return {...item, ...recipient.find(r => r.value === item.recipient)?.sender};
+        }).filter(item => item && item.email);
+        return recipients.map((item) => {
+          const payload = {
+            user_id: tokenData.id,
+            to: [item.email],
+            cc: values.cc || [],
+            subject: values.subject,
+            text: values.body,
+          };
+          const params = {
+            full_name: '',
+          }
+          if (values['key_val']?.length) {
+            values['key_val'].forEach((item) => {
+              Object.assign(params, item);
+            })
+          }
+          values['attachments']?.length && values['attachments'].forEach((item) => {
+            Object.assign(params, {[item.replace(/uploads\/|\.\w+$/g, "")]: process.env.REACT_APP_API_URL + '/' + item})
+          })
+          payload.text = ejs.render(decodeHTML(payload.text), params);
+          return payload;
         })
-        console.log(params)
-        payload.text = ejs.render(decodeHTML(payload.text), params);
-        console.log(payload)
-        return payload;
-      });
-    } catch (e) {
+      }
+    } catch
+      (e) {
       console.error(e);
     }
+  }
+  const handleDynamicTableChange = (data) => {
   }
   const onFinish = (values) => {
     const payloads = handleEJS(values);
@@ -92,16 +106,18 @@ const MailForm = () => {
       })
     }
   };
+
   const handlePreview = () => {
     form.validateFields().then(values => {
       const payloads = handleEJS(values);
-      setText(payloads[0].text);
+      setText(payloads?.length ? payloads[0].text : payloads?.text);
     }).catch(e => {
       console.error(e);
     })
   }
   useEffect(() => {
-    fetchFiles()
+    fetchRecipient();
+    fetchFiles();
   }, [])
   return (<Home>
     <Form
@@ -109,14 +125,7 @@ const MailForm = () => {
       layout="vertical"
       onFinish={onFinish}
     >
-      <Form.Item
-        name="to"
-        label="Đến"
-        rules={[{required: true, message: 'Vui lòng nhập email người nhận!'}]}
-      >
-        <MultiSelectRecipient ref={editorRef} newSender={true} onChange={handleRecipients} />
-      </Form.Item>
-
+      <DynamicKeyValTable onDataChange={handleDynamicTableChange} form={form} recipient={recipient} />
       <Form.Item
         name="cc"
         label="Cc"
@@ -145,12 +154,7 @@ const MailForm = () => {
       </div>
       <div>
         <p className={'note'}>Để sử dụng dữ liệu động, hãy sử dụng cú
-          pháp <code>{`
-          <%= key %>
-          `}</code> trong nội dung email.</p>
-        <p className={'note'}>Mặc định sẽ có các key
-          là <code>{`email`}</code>, <code>{`full_name`}</code> nên bạn có thể sử dụng
-          chúng.</p>
+          pháp <code>{`<%= key %>`}</code> trong nội dung email.</p>
         <p className={'note'}>Nếu bạn muốn thêm dữ liệu động là tệp tin, hãy sử dụng cú
           pháp <code>{`<img src="<%= <tên tệp> %>" />`}</code> trong nội dung email.</p>
       </div>
@@ -165,33 +169,6 @@ const MailForm = () => {
           options={attachments}
         ></Select>
       </Form.Item>
-      <Form.List name="key_val" label="Dữ liệu động">
-        {(fields, {add, remove}) => (<>
-          {fields.map(({key, name, ...restField}) => (
-            <Space key={key} style={{display: 'flex', marginBottom: 8}} align="baseline">
-              <Form.Item
-                {...restField}
-                name={[name, 'key']}
-                rules={[{required: true, message: 'Missing key'}]}
-              >
-                <Input placeholder="Key" />
-              </Form.Item>
-              <Form.Item
-                {...restField}
-                name={[name, 'value']}
-                // rules={[{required: true, message: 'Missing last name'}]}
-              >
-                <Input placeholder="Value" />
-              </Form.Item>
-              <MinusCircleOutlined onClick={() => remove(name)} />
-            </Space>))}
-          <Form.Item>
-            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-              Thêm dữ liệu động
-            </Button>
-          </Form.Item>
-        </>)}
-      </Form.List>
       <Form.Item>
         <Button type="primary" loading={loading} onClick={() => setLoading(true)}
                 htmlType="submit">Gửi
@@ -201,4 +178,4 @@ const MailForm = () => {
   </Home>);
 };
 
-export default MailForm;
+export default MailFormEJS;

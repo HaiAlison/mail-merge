@@ -22,7 +22,7 @@ const useNetworkStatus = (backendUrl) => {
     window.addEventListener('online', updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);
 
-    const intervalId = setInterval(checkBackendStatus, 5000);
+    const intervalId = setInterval(checkBackendStatus, 10000);
 
     return () => {
       window.removeEventListener('online', updateOnlineStatus);

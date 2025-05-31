@@ -11,6 +11,7 @@ import ScrollableList from "../ScrollableList";
 import CustomButton from "../CustomButton";
 import { ImportOutlined } from "@ant-design/icons";
 import ImportRecipient from "./importRecipient";
+import templateFile from '../../assets/template/recipient.xlsx';
 
 const Recipient = () => {
   const [loading, setLoading] = useState(false);
@@ -36,16 +37,22 @@ const Recipient = () => {
 
   return (
     <Home>
-     <Row style={{marginBottom: "10px", marginRight: "10px"}}>
-       <Col offset={22}>
-         <CustomButton
-           onClick={() => setImportRecipientVisible(true)}
-           title="Nhập tệp"
-           icon={<ImportOutlined  />}
-         />
-       </Col>
-     </Row>
-       <ImportRecipient visible={importRecipientVisible} onClose={() => setImportRecipientVisible(false)} />
+      <Row style={{marginBottom: "10px", marginRight: "10px"}}>
+        <Col span={8}>
+          <a href={templateFile} download>
+            Tải xuống mẫu tệp
+          </a>
+        </Col>
+        <Col span={8} offset={8} style={{textAlign: "right"}}>
+          <CustomButton
+            onClick={() => setImportRecipientVisible(true)}
+            title="Nhập tệp"
+            icon={<ImportOutlined />}
+          />
+        </Col>
+      </Row>
+      <ImportRecipient visible={importRecipientVisible} onClose={() => setImportRecipientVisible(false)}
+                       onComplete={fetchData} />
       <ScrollableList
         children={
           <InfiniteScroll

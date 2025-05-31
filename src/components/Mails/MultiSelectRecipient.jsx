@@ -10,7 +10,7 @@ const MultiSelectRecipient = forwardRef((props) => {
     // Fetch options
     getRecipients(100, 1).then((data) => {
       setOptions(data.results.map((sender) => ({
-        value: sender.email, label: sender.email, sender: sender
+        value: sender.email, label: `${sender.first_name} ${sender.last_name} (${sender.email})`, sender: sender
       })));
     }).catch(e => {
       notification.error({

@@ -1,19 +1,29 @@
 import CustomModal from "../CustomModal";
-import { Flex, Upload } from "antd";
+import { Flex, notification, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useEffect } from "react";
 import { uploadImportRecipient } from "../../api/uploadAPI";
 
 const {Dragger} = Upload;
 
-const ImportRecipient = ({visible, onClose}) => {
+const ImportRecipient = ({visible, onClose, onComplete}) => {
   const [file, setFile] = React.useState(null);
   const handleImportRecipient = (file) => {
-    const formData = new FormData();
-    formData.append("file", file.originFileObj || file);
-    return uploadImportRecipient(formData).then(() => {
-      onClose();
-    });
+    try {
+
+      const formData = new FormData();
+      formData.append("file", file.originFileObj || file);
+      formData.append("type", "recipient");
+      return uploadImportRecipient(formData).then(() => {
+        if (onComplete) onComplete();
+        notification.success({message: "Nhập danh sách người nhận thành công"});
+        setFile(null);
+        onClose();
+      });
+    }catch (e){
+      console.error("Error importing recipient:", e);
+      notification.error({message: "Lỗi khi nhập danh sách người nhận"});
+    }
   }
   const draggerProps = {
     beforeUpload: (file) => {
@@ -22,7 +32,15 @@ const ImportRecipient = ({visible, onClose}) => {
     },
     maxCount: 1,
     accept: ".xlsx, .xls",
+    onRemove: () => {
+      setFile(null);
+    }
   }
+  useEffect(() => {
+    if (!visible) {
+      setFile(null);
+    }
+  }, [visible]);
   return (
     <CustomModal
       children={

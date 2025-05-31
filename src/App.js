@@ -4,12 +4,13 @@ import Home from "./pages/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/Auth/Login";
 import Redirect from "./pages/Redirect";
-import MailForm from "./pages/MailForm";
+import MailFormEJS from "./pages/MailFormEJS";
 import ListFile from "./components/Files/ListFile";
 import Inbox from "./pages/Inbox";
 import Recipient from "./components/Recipients/Recipient";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Template from "./components/Template/Tempate";
+import MailFormNormal from "./pages/MailFormNormal";
 
 function App() {
   return (
@@ -27,9 +28,14 @@ function App() {
             <Dashboard />
           </ProtectedRoute>
         } />
-        <Route path="/mails/send" element={
+        <Route path="/mails/send/ejs" element={
           <ProtectedRoute>
-            <MailForm />
+            <MailFormEJS />
+          </ProtectedRoute>
+        } />
+        <Route path="/mails/send/normal" element={
+          <ProtectedRoute>
+            <MailFormNormal />
           </ProtectedRoute>
         } />
         <Route path="/mails/sent-list" element={
@@ -37,11 +43,11 @@ function App() {
             <Inbox />
           </ProtectedRoute>
         } />
-        <Route path="/mails/template" element={
-          <ProtectedRoute>
-            <Template />
-          </ProtectedRoute>
-        } />
+        {/*<Route path="/mails/template" element={*/}
+        {/*  <ProtectedRoute>*/}
+        {/*    <Template />*/}
+        {/*  </ProtectedRoute>*/}
+        {/*} />*/}
         <Route path="/recipient" element={
           <ProtectedRoute>
             <Recipient />

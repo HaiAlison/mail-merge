@@ -51,3 +51,17 @@ export const deleteRecipient = async (id) => {
     throw e;
   }
 }
+
+export const getSentList = async (limit, offset) => {
+  try {
+    const {data} = await axios.get(`${process.env.REACT_APP_API_URL}/mail/sent?limit=${limit}&offset=${offset}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    return data;
+  } catch (e) {
+    console.error('Error getting sent list:', e);
+    throw e;
+  }
+}
