@@ -31,7 +31,7 @@ const MailFormEJS = () => {
     })
   };
   const handleRecipients = (selected, options) => {
-    setSenders(options);
+    setSenders(selected);
   };
 
   function mergeText(template, data) {
@@ -47,7 +47,7 @@ const MailFormEJS = () => {
         if (recipients?.length) {
           const payload = {
             user_id: tokenData.id,
-            to: recipients.map(item => item.email),
+            to: senders,
             cc: values.cc || [],
             subject: values.subject,
             text: values.body,
