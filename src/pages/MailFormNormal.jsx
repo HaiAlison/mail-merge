@@ -13,7 +13,7 @@ const MailFormEJS = () => {
   const [form] = Form.useForm();
   const editorRef = useRef(null);
   const [recipient, setRecipient] = useState([]);
-  const [sendMode, setSendMode] = useState('separate');
+  const [sendMode, setSendMode] = useState('multiple');
   const [senders, setSenders] = useState([]);
   const tokenData = useToken();
 
@@ -85,6 +85,7 @@ const MailFormEJS = () => {
     }
   }
   const handleDynamicTableChange = (data) => {
+    console.log('data', data);
   }
   const onFinish = (values) => {
     try {

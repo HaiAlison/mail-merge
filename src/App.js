@@ -20,7 +20,7 @@ function App() {
         <Route path="auth/redirect" element={<Redirect />} />
         <Route path="/" element={
           <ProtectedRoute>
-            <Home />
+            <Dashboard />
           </ProtectedRoute>
         } />
         <Route path="dashboard" element={

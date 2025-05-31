@@ -184,7 +184,7 @@ const DynamicKeyValTable = ({form, recipient = [], onDataChange}) => {
           <Popconfirm title="Sure to delete?" onConfirm={() => {
             handleDelete(record.rowKey);
           }}>
-            <a>Delete</a>
+            <a>Xoá</a>
           </Popconfirm>
         ) : null
       },
@@ -217,6 +217,8 @@ const DynamicKeyValTable = ({form, recipient = [], onDataChange}) => {
       rowKey: count,
       recipient: '',
       key: 'value',
+      // Add default values for new columns
+      ...Object.fromEntries(columns.filter(col => col.dataIndex !== 'recipient' && col.dataIndex !== 'operation').map(col => [col.dataIndex, 'value']))
     };
     setDataSource([...dataSource, newData]);
   };
@@ -226,7 +228,7 @@ const DynamicKeyValTable = ({form, recipient = [], onDataChange}) => {
     // Add the field to all existing data
     const newData = dataSource.map(item => ({
       ...item,
-      [newColumnName]: ''
+      [newColumnName]: 'value'
     }));
 
     // Add the new column definition

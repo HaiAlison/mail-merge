@@ -64,7 +64,7 @@ const ListFile = () => {
               )}
             />
           </InfiniteScroll>}
-        button={<UploadFile />}
+        button={<UploadFile onChange={fetchFiles}/>}
       />
     </Home>
   );

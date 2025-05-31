@@ -71,7 +71,6 @@ const Inbox = () => {
           )}
         />
       </InfiniteScroll>}
-      button={<CreateRecipientButton fetchData={fetchData} isFloatButton={true} />}
     />
     <Modal
       title={selectedEmail?.subject}

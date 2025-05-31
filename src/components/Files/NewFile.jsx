@@ -7,7 +7,7 @@ import { uploadImages } from "../../api/uploadAPI";
 
 const {Dragger} = Upload;
 
-const UploadFile = () => {
+const UploadFile = ({onChange}) => {
   const [fileList, setFileList] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -24,6 +24,7 @@ const UploadFile = () => {
       setOpenModal(false);
       notification.success({message: 'Thành công', description: 'Tải lên tệp thành công'});
       setFileList([]);
+      onChange()
     }).catch(e => {
       console.error('Error:', e);
       Modal.error({
@@ -46,7 +47,6 @@ const UploadFile = () => {
       }
       return item;
     });
-    console.log(updatedFileList)
     setFileList(updatedFileList);
   };
   const deleteFile = (file) => {

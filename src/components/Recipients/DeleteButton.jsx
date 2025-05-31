@@ -1,4 +1,4 @@
-import { Button, notification } from "antd";
+import { Button, notification, Popconfirm } from "antd";
 import '../../styles/Common.css'
 import { DeleteOutlined } from '@ant-design/icons'
 import { deleteRecipient } from "../../api/mailApi";
@@ -23,12 +23,16 @@ function DeleteButton({id, fetchData}) {
 
   return (
     <>
-      <Button type="primary" size={"middle"}
-              onClick={() => {
-                handleDeleteButton(id);
-              }}
-              style={{backgroundColor: "#f5222d", borderColor: "#f5222d", marginRight: "2rem"}}
-              icon={<DeleteOutlined />}></Button>
+      <Popconfirm
+        title="Are you sure you want to delete this recipient?"
+        onConfirm={() => handleDeleteButton(id)}
+        okText="Yes"
+        cancelText="No"
+      >
+        <Button type="primary" size={"middle"}
+                style={{backgroundColor: "#f5222d", borderColor: "#f5222d", marginRight: "2rem"}}
+                icon={<DeleteOutlined />}></Button>
+      </Popconfirm>
     </>);
 }
 
